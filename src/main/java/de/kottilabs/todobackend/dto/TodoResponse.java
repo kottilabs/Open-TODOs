@@ -19,6 +19,5 @@ public class TodoResponse extends TodoRequest {
 
 	private UUID id;
 
-	private UUID scopeId;
 	private String scopeName;
 }

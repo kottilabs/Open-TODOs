@@ -31,19 +31,25 @@ public class TodoController {
 
 	@RequestMapping(value = "/{scope}", method = RequestMethod.GET)
 	private List<TodoResponse> find(@PathVariable final UUID scope) {
-		List<Todo> result = todoService.find(scope);
-		return result.stream().map(this::convert).collect(Collectors.toList());
+		try {
+			List<Todo> result = todoService.find(scope);
+			return result.stream().map(this::convert).collect(Collectors.toList());
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	@RequestMapping(value = "/{scope}", method = RequestMethod.POST)
-	private TodoResponse create(@PathVariable final UUID scope, @RequestBody @Validated final TodoRequest todo) {
+	private TodoResponse create(@PathVariable final UUID scope,
+			@RequestBody @Validated(TodoRequest.Create.class) final TodoRequest todo) {
 		return convert(todoService.save(convert(todo, scope)));
 	}
 
 	@RequestMapping(value = "/{scope}/{id}", method = RequestMethod.PUT)
 	private TodoResponse update(@PathVariable final UUID scope, @PathVariable final UUID id,
-			@RequestBody @Validated final TodoRequest todo) {
-		return convert(todoService.update(scope, id, convert(todo, scope)));
+			@RequestBody @Validated(TodoRequest.Update.class) final TodoRequest todo) {
+		return convert(todoService.update(scope, id, convert(todo, todo.getScopeId())));
 	}
 
 	@RequestMapping(value = "/{scope}/{id}", method = RequestMethod.GET)

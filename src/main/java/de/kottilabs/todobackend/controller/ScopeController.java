@@ -2,6 +2,7 @@ package de.kottilabs.todobackend.controller;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import de.kottilabs.todobackend.dto.ScopeRequest;
@@ -43,6 +44,11 @@ public class ScopeController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	private ScopeResponse get(@PathVariable final UUID id) {
 		return convert(scopeService.findById(id));
+	}
+
+	@RequestMapping(value = "/{id}/childs", method = RequestMethod.GET)
+	private List<ScopeResponse> findChilds(@PathVariable final UUID id) {
+		return scopeService.getScopeWithChildren(id).stream().map(this::convert).collect(Collectors.toList());
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

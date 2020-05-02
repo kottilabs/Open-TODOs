@@ -1,8 +1,6 @@
 package de.kottilabs.todobackend.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,15 +27,8 @@ public class ScopeService {
 	public Scope update(UUID id, Scope scope) {
 		Scope scopeInDB = findById(id);
 
-		Scope parentScope = scope.getParentScope();
-		if (parentScope != null) {
-			scopeInDB.setParentScope(parentScope);
-		}
-
-		String name = scope.getName();
-		if (name != null) {
-			scopeInDB.setName(name);
-		}
+		scopeInDB.setName(scope.getName());
+		scopeInDB.setParentScope(scope.getParentScope());
 
 		return scopeRepository.save(scope);
 	}
@@ -50,5 +41,23 @@ public class ScopeService {
 		Scope scope = scopeRepository.findById(id).orElseThrow(ScopeNotFoundException::new);
 		scopeRepository.delete(scope);
 		return scope;
+	}
+
+	public Set<Scope> getScopeWithChildren(UUID id) {
+		Set<Scope> scopes = new HashSet<>();
+		Scope scope = scopeRepository.findById(id).orElseThrow(ScopeNotFoundException::new);
+		scopes.add(scope);
+
+		List<Scope> byParentScopeIn = scopeRepository.findByParentScopeIn(Collections.singletonList(scope));
+		recursiveAdd(scopes, byParentScopeIn);
+
+		return scopes;
+	}
+
+	private void recursiveAdd(Set<Scope> scopes, List<Scope> byParentScopeIn) {
+		if (!byParentScopeIn.isEmpty()) {
+			scopes.addAll(byParentScopeIn);
+			recursiveAdd(scopes, scopeRepository.findByParentScopeIn(byParentScopeIn));
+		}
 	}
 }
