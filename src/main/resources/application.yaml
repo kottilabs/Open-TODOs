@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:sqlite:todo.db
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties.hibernate.dialect: org.hibernate.dialect.SQLiteDialect
+
