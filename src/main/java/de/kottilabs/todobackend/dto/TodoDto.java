@@ -26,5 +26,6 @@ public class TodoDto {
 	private String description;
 
 	private UUID scopeId;
+	
 	private String scopeName;
 }
