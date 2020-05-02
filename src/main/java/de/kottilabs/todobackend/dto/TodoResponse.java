@@ -11,21 +11,14 @@ import javax.validation.constraints.NotNull;
 import de.kottilabs.todobackend.dao.Scope;
 import de.kottilabs.todobackend.dao.TodoState;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class TodoDto {
+@EqualsAndHashCode(callSuper = true)
+public class TodoResponse extends TodoRequest {
 
 	private UUID id;
 
-	@NotNull
-	private String name;
-
-	private TodoState state = TodoState.TODO;
-
-	@NotNull
-	private String description;
-
 	private UUID scopeId;
-	
 	private String scopeName;
 }

@@ -1,12 +1,11 @@
 package de.kottilabs.todobackend.dto;
 
-import lombok.Data;
-
 import java.util.UUID;
 
+import lombok.Data;
+
 @Data
-public class ScopeDto {
-	private UUID id;
+public class ScopeRequest {
 
 	private String name;
 
