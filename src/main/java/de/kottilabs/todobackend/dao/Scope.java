@@ -11,19 +11,14 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Todo {
+public class Scope {
 
 	@Id
 	@GeneratedValue
 	private UUID id;
 
-	@OneToOne
-	private Scope scope;
-
 	private String name;
 
-	private TodoState state = TodoState.TODO;
-
-	private String description;
-
+	@OneToOne
+	private Scope parentScope;
 }

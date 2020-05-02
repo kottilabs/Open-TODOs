@@ -4,5 +4,5 @@ import java.util.UUID;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface TodoRepository extends CrudRepository<Todo, UUID> {
+public interface ScopeRepository extends CrudRepository<Scope, UUID> {
 }
