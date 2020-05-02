@@ -3,7 +3,7 @@ target/
 .mvn/wrapper/
 !**/src/main/**
 !**/src/test/**
-todo.db
+db/todo.db
 
 ### STS ###
 .apt_generated

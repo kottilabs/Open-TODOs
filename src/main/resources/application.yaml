@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:sqlite:todo.db
+    url: jdbc:sqlite:db/todo.db
 
   jpa:
     hibernate:
