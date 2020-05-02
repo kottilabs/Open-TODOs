@@ -1,5 +1,6 @@
 FROM maven:3.5.2-jdk-8-alpine AS MAVEN_TOOL_CHAIN
 WORKDIR /tmp/
+RUN mkdir db
 COPY pom.xml /tmp/
 RUN mvn verify clean --fail-never
 COPY src /tmp/src/
@@ -11,6 +12,8 @@ COPY --from=MAVEN_TOOL_CHAIN /tmp/target/todo.jar /opt/app/app.jar
 WORKDIR /opt/app/
 
 RUN chmod 777 app.jar
+
+RUN mkdir db
 
 EXPOSE 8080
 
