@@ -2,16 +2,15 @@ package de.kottilabs.todobackend.controller;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import de.kottilabs.todobackend.dto.ScopeRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import de.kottilabs.todobackend.dao.Scope;
+import de.kottilabs.todobackend.dto.ScopeRequest;
 import de.kottilabs.todobackend.dto.ScopeResponse;
 import de.kottilabs.todobackend.service.ScopeService;
 
@@ -27,8 +26,9 @@ public class ScopeController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	private List<ScopeResponse> find() {
-		List<Scope> result = scopeService.find();
-		return result.stream().map(this::convert).collect(Collectors.toList());
+		List<Scope> results = scopeService.find();
+		System.out.println(results);
+		return results.stream().map(this::convert).collect(Collectors.toList());
 	}
 
 	@RequestMapping(method = RequestMethod.POST)

@@ -4,17 +4,20 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import de.kottilabs.todobackend.dao.Scope;
-import de.kottilabs.todobackend.dto.TodoRequest;
-import de.kottilabs.todobackend.dto.TodoResponse;
-import de.kottilabs.todobackend.service.ScopeService;
-import de.kottilabs.todobackend.service.TodoService;
+import de.kottilabs.todobackend.advice.TodoScopeNotMatchingException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import de.kottilabs.todobackend.dao.Scope;
 import de.kottilabs.todobackend.dao.Todo;
+import de.kottilabs.todobackend.dto.TodoRequest;
+import de.kottilabs.todobackend.dto.TodoResponse;
+import de.kottilabs.todobackend.service.ScopeService;
+import de.kottilabs.todobackend.service.TodoService;
+
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping(value = { "/api/todo" })
@@ -32,8 +35,8 @@ public class TodoController {
 	@RequestMapping(value = "/{scope}", method = RequestMethod.GET)
 	private List<TodoResponse> find(@PathVariable final UUID scope) {
 		try {
-			List<Todo> result = todoService.find(scope);
-			return result.stream().map(this::convert).collect(Collectors.toList());
+			List<Todo> results = todoService.find(scope);
+			return results.stream().map(this::convert).collect(Collectors.toList());
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -43,6 +46,12 @@ public class TodoController {
 	@RequestMapping(value = "/{scope}", method = RequestMethod.POST)
 	private TodoResponse create(@PathVariable final UUID scope,
 			@RequestBody @Validated(TodoRequest.Create.class) final TodoRequest todo) {
+		UUID scopeId = todo.getScopeId();
+		if (scopeId != null) {
+			if (!scopeId.equals(scope)) {
+				throw new TodoScopeNotMatchingException();
+			}
+		}
 		return convert(todoService.save(convert(todo, scope)));
 	}
 

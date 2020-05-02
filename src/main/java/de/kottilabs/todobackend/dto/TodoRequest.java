@@ -18,7 +18,6 @@ public class TodoRequest {
 	private TodoState state;
 
 	@NotNull(groups = Update.class)
-	@Null(groups = Create.class)
 	private UUID scopeId;
 
 	@NotNull
