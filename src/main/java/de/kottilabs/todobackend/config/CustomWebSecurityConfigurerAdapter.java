@@ -27,7 +27,8 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
 	private CustomAuthenticationProvider authenticationProvider;
 
 	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+	@Override
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(authenticationProvider);
 	}
 
