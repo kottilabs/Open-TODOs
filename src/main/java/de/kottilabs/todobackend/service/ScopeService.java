@@ -38,14 +38,14 @@ public class ScopeService {
 	}
 
 	public Scope delete(UUID id) {
-		Scope scope = scopeRepository.findById(id).orElseThrow(ScopeNotFoundException::new);
+		Scope scope = findById(id);
 		scopeRepository.delete(scope);
 		return scope;
 	}
 
 	public Set<Scope> getScopeWithChildren(UUID id) {
 		Set<Scope> scopes = new HashSet<>();
-		Scope scope = scopeRepository.findById(id).orElseThrow(ScopeNotFoundException::new);
+		Scope scope = findById(id);
 		scopes.add(scope);
 
 		List<Scope> byParentScopeIn = scopeRepository.findByParentScopeIn(Collections.singletonList(scope));

@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import de.kottilabs.todobackend.permission.Roles;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,33 +26,38 @@ public class ScopeController {
 	@Autowired
 	private ScopeService scopeService;
 
+	@Secured(Roles.SCOPE_READ)
 	@RequestMapping(method = RequestMethod.GET)
 	private List<ScopeResponse> find() {
 		List<Scope> results = scopeService.find();
-		System.out.println(results);
 		return results.stream().map(this::convert).collect(Collectors.toList());
 	}
 
+	@Secured(Roles.SCOPE_CREATE)
 	@RequestMapping(method = RequestMethod.POST)
 	private ScopeResponse create(@RequestBody @Validated final ScopeRequest scope) {
 		return convert(scopeService.save(convert(scope)));
 	}
 
+	@Secured(Roles.SCOPE_UPDATE)
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	private ScopeResponse update(@PathVariable final UUID id, @RequestBody @Validated final ScopeRequest scope) {
 		return convert(scopeService.update(id, convert(scope)));
 	}
 
+	@Secured(Roles.SCOPE_READ)
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	private ScopeResponse get(@PathVariable final UUID id) {
 		return convert(scopeService.findById(id));
 	}
 
+	@Secured(Roles.SCOPE_READ)
 	@RequestMapping(value = "/{id}/childs", method = RequestMethod.GET)
 	private List<ScopeResponse> findChilds(@PathVariable final UUID id) {
 		return scopeService.getScopeWithChildren(id).stream().map(this::convert).collect(Collectors.toList());
 	}
 
+	@Secured(Roles.SCOPE_CREATE)
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	private ScopeResponse delete(@PathVariable final UUID id) {
 		return convert(scopeService.delete(id));
