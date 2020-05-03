@@ -17,6 +17,6 @@ RUN mkdir db
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT exec java $JAVA_OPTS  -jar app.jar
 
 # HEALTHCHECK --interval=1m --timeout=3s CMD wget --quiet --tries=1 --spider http://localhost:8080/swagger-ui.html || exit 1
