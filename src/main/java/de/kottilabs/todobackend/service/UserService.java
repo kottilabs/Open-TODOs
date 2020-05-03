@@ -54,8 +54,8 @@ public class UserService {
 		return userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
 	}
 
-	public User findByUsernameOrNull(String role) {
-		return userRepository.findByUsername(role).orElse(null);
+	public User findByUsernameOrNull(String username) {
+		return userRepository.findByUsername(username).orElse(null);
 	}
 
 	public User delete(UUID id) {

@@ -4,10 +4,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import de.kottilabs.todobackend.permission.Roles;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,16 +30,16 @@ public class TodoController {
 	@Autowired
 	private ScopeService scopeService;
 
-	@Secured(Roles.TODO_READ)
+	// @Secured(Roles.TODO_READ)
 	@RequestMapping(value = "/{scope}", method = RequestMethod.GET)
-	private List<TodoResponse> find(@PathVariable final UUID scope) {
+	public List<TodoResponse> find(@PathVariable final UUID scope) {
 		List<Todo> results = todoService.find(scope);
 		return results.stream().map(this::convert).collect(Collectors.toList());
 	}
 
-	@Secured(Roles.TODO_CREATE)
+	// @Secured(Roles.TODO_CREATE)
 	@RequestMapping(value = "/{scope}", method = RequestMethod.POST)
-	private TodoResponse create(@PathVariable final UUID scope,
+	public TodoResponse create(@PathVariable final UUID scope,
 			@RequestBody @Validated(TodoRequest.Create.class) final TodoRequest todo) {
 		UUID scopeId = todo.getScopeId();
 		if (scopeId != null) {
@@ -52,22 +50,22 @@ public class TodoController {
 		return convert(todoService.save(convert(todo, scope)));
 	}
 
-	@Secured(Roles.TODO_UPDATE)
+	// @Secured(Roles.TODO_UPDATE)
 	@RequestMapping(value = "/{scope}/{id}", method = RequestMethod.PUT)
-	private TodoResponse update(@PathVariable final UUID scope, @PathVariable final UUID id,
+	public TodoResponse update(@PathVariable final UUID scope, @PathVariable final UUID id,
 			@RequestBody @Validated(TodoRequest.Update.class) final TodoRequest todo) {
 		return convert(todoService.update(scope, id, convert(todo, todo.getScopeId())));
 	}
 
-	@Secured(Roles.TODO_READ)
+	// @Secured(Roles.TODO_READ)
 	@RequestMapping(value = "/{scope}/{id}", method = RequestMethod.GET)
-	private TodoResponse get(@PathVariable final UUID scope, @PathVariable final UUID id) {
+	public TodoResponse get(@PathVariable final UUID scope, @PathVariable final UUID id) {
 		return convert(todoService.findById(scope, id));
 	}
 
-	@Secured(Roles.TODO_CREATE)
+	// @Secured(Roles.TODO_CREATE)
 	@RequestMapping(value = "/{scope}/{id}", method = RequestMethod.DELETE)
-	private TodoResponse delete(@PathVariable final UUID scope, @PathVariable final UUID id) {
+	public TodoResponse delete(@PathVariable final UUID scope, @PathVariable final UUID id) {
 		return convert(todoService.delete(scope, id));
 	}
 

@@ -1,36 +1,31 @@
 package de.kottilabs.todobackend.config;
 
-import com.google.common.collect.Lists;
+import java.util.Set;
+
+import javax.annotation.PostConstruct;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+
 import com.google.common.collect.Sets;
+
 import de.kottilabs.todobackend.dao.Role;
 import de.kottilabs.todobackend.dao.User;
 import de.kottilabs.todobackend.permission.PermissionUtil;
 import de.kottilabs.todobackend.permission.Roles;
 import de.kottilabs.todobackend.service.RoleService;
 import de.kottilabs.todobackend.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.util.Set;
-
-@Component
-public class CustomAuthenticationProvider implements AuthenticationProvider {
+// @Component
+public class CustomAuthenticationProvider // implements AuthenticationProvider {
+{
 
 	private static Logger log = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+//	@Autowired
+//	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private UserService userService;
@@ -166,31 +161,31 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			user = new User();
 		}
 		user.setUsername(adminUsername);
-		String password = passwordEncoder.encode(adminPassword);
-		user.setPassword(password);
+//		String password = passwordEncoder.encode(adminPassword);
+//		user.setPassword(password);
 		user.setDisplayname(adminDisplayname);
 		user.setAuthorities(Sets.newHashSet(adminRole));
 		log.info("Store admin user: \n\n{}\n", user);
 		userService.save(user);
 	}
 
-	@Override
-	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-
-		String username = authentication.getName();
-		String password = authentication.getCredentials().toString();
-
-		User user = userService.findByUsernameOrNull(username);
-		if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
-			throw new BadCredentialsException("Username or Password is wrong");
-		}
-
-		Set<GrantedAuthority> authorities = PermissionUtil.grantedAuthorityOf(user.getAuthorities());
-		return new UsernamePasswordAuthenticationToken(username, password, authorities);
-	}
-
-	@Override
-	public boolean supports(Class<?> authentication) {
-		return authentication.equals(UsernamePasswordAuthenticationToken.class);
-	}
+//	@Override
+//	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+//
+//		String username = authentication.getName();
+//		String password = authentication.getCredentials().toString();
+//
+//		User user = userService.findByUsernameOrNull(username);
+//		if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
+//			throw new BadCredentialsException("Username or Password is wrong");
+//		}
+//
+//		Set<GrantedAuthority> authorities = PermissionUtil.grantedAuthorityOf(user.getAuthorities());
+//		return new UsernamePasswordAuthenticationToken(username, password, authorities);
+//	}
+//
+//	@Override
+//	public boolean supports(Class<?> authentication) {
+//		return authentication.equals(UsernamePasswordAuthenticationToken.class);
+//	}
 }
