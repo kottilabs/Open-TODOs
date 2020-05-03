@@ -41,6 +41,7 @@ public class TodoService {
 		todoInDB.setDescription(todo.getDescription());
 		todoInDB.setScope(todo.getScope());
 		todoInDB.setState(todo.getState());
+		todoInDB.setIcon(todo.getIcon());
 
 		return todoRepository.save(todoInDB);
 	}

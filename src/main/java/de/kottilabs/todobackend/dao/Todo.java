@@ -24,6 +24,8 @@ public class Todo {
 
 	private TodoState state = TodoState.TODO;
 
+	private String icon;
+
 	private String description;
 
 }

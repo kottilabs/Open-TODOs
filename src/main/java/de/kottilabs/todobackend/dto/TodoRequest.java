@@ -23,6 +23,8 @@ public class TodoRequest {
 	@NotNull
 	private String description;
 
+	private String icon;
+
 	public interface Create {
 	}
 
