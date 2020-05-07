@@ -1,7 +1,14 @@
 package de.kottilabs.todobackend.config;
 
-import de.kottilabs.todobackend.advice.InvalidJwtAuthenticationException;
-import io.jsonwebtoken.*;
+import java.util.Base64;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,20 +17,22 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
+import de.kottilabs.todobackend.dao.AuthToken;
+import de.kottilabs.todobackend.dao.AuthTokenRepository;
+import io.jsonwebtoken.*;
 
 @Component
 public class JwtTokenProvider {
-	@Value("${security.jwt.token.secret-key:secret}")
-	private String secretKey = "secret";
-	@Value("${security.jwt.token.expire-length:3600000}")
-	private long validityInMilliseconds = 3600000; // 1h
+	private static Logger log = LoggerFactory.getLogger(JwtTokenProvider.class);
+
+	@Value("${security.jwt.token.secret-key:todoSecret}")
+	private String secretKey = "todoSecret";
+	@Value("${security.jwt.token.expire-length:180000}")
+	private long validityInMilliseconds = 180000; // 30 min
 	@Autowired
 	private UserDetailsService userDetailsService;
+	@Autowired
+	private AuthTokenRepository authTokenRepository;
 
 	@PostConstruct
 	protected void init() {
@@ -34,13 +43,17 @@ public class JwtTokenProvider {
 		Claims claims = Jwts.claims().setSubject(username);
 		claims.put("roles", roles);
 		Date now = new Date();
-		Date validity = new Date(now.getTime() + validityInMilliseconds);
-		return Jwts.builder()//
+		String token = Jwts.builder()//
 				.setClaims(claims)//
 				.setIssuedAt(now)//
-				.setExpiration(validity)//
 				.signWith(SignatureAlgorithm.HS256, secretKey)//
 				.compact();
+		long validity = System.currentTimeMillis() + validityInMilliseconds;
+		AuthToken authToken = new AuthToken();
+		authToken.setUsername(username);
+		authToken.setValidity(validity);
+		authTokenRepository.save(authToken);
+		return token;
 	}
 
 	public Authentication getAuthentication(String token) {
@@ -63,12 +76,22 @@ public class JwtTokenProvider {
 	public boolean validateToken(String token) {
 		try {
 			Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-			if (claims.getBody().getExpiration().before(new Date())) {
+			long now = System.currentTimeMillis();
+			AuthToken authToken = authTokenRepository
+					.findByUsernameAndValidityGreaterThan(claims.getBody().getSubject(), now).orElse(null);
+			if (authToken == null) {
 				return false;
+			}
+
+			if (authToken.getValidity() < now + validityInMilliseconds / 2) {
+				log.info("Update validitiy of token for: {}", authToken.getUsername());
+				long validity = now + validityInMilliseconds;
+				authToken.setValidity(validity);
+				authTokenRepository.save(authToken);
 			}
 			return true;
 		} catch (JwtException | IllegalArgumentException e) {
-			throw new InvalidJwtAuthenticationException();
+			return false;
 		}
 	}
 }
