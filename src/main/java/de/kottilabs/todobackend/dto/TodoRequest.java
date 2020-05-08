@@ -11,16 +11,16 @@ import java.util.UUID;
 @Data
 public class TodoRequest {
 
-	@NotNull
+	@NotNull(groups = Create.class)
 	private String name;
 
-	@NotNull
+	@NotNull(groups = Create.class)
 	private TodoState state;
 
 	@NotNull(groups = Update.class)
 	private UUID scopeId;
 
-	@NotNull
+	@NotNull(groups = Create.class)
 	private String description;
 
 	private String icon;

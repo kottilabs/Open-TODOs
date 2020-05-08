@@ -31,7 +31,7 @@ import io.jsonwebtoken.*;
 public class JwtTokenProvider {
 	private static final String AUTH_TOKEN = "auth-token";
 	private static final String ROLES = "roles";
-	private static Logger log = LoggerFactory.getLogger(JwtTokenProvider.class);
+	private static final Logger log = LoggerFactory.getLogger(JwtTokenProvider.class);
 
 	private String secretKey;
 

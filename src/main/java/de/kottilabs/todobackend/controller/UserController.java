@@ -8,6 +8,7 @@ import de.kottilabs.todobackend.permission.Roles;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,14 +46,15 @@ public class UserController {
 
 	@Secured(Roles.USER_CREATE)
 	@RequestMapping(method = RequestMethod.POST)
-	public UserResponse create(@RequestBody @Validated final UserRequest user) {
+	public UserResponse create(@RequestBody @Validated(UserRequest.Create.class) final UserRequest user) {
 		return convert(userService.save(convert(user)));
 	}
 
 	@Secured(Roles.USER_UPDATE)
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public UserResponse update(@PathVariable final UUID id, @RequestBody @Validated final UserRequest user) {
-		return convert(userService.update(id, convert(user)));
+	public UserResponse update(@PathVariable final UUID id,
+			@RequestBody @Validated(UserRequest.Update.class) final UserRequest user) {
+		return convert(userService.updateSelf(id, convert(user)));
 	}
 
 	@Secured(Roles.USER_READ)
@@ -62,9 +64,10 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/self", method = RequestMethod.PUT)
-	public UserResponse updateSelf(@RequestBody @Validated final UserRequest user, Authentication authentication) {
+	public UserResponse updateSelf(@RequestBody @Validated(UserRequest.Update.class) final UserRequest user,
+			Authentication authentication) {
 		String username = getUsername(authentication);
-		return convert(userService.update(username, convert(user)));
+		return convert(userService.updateSelf(username, convert(user), user.getPrevPassword()));
 	}
 
 	@RequestMapping(value = "/self", method = RequestMethod.GET)
@@ -74,7 +77,8 @@ public class UserController {
 	}
 
 	private String getUsername(Authentication authentication) {
-		return ((UserDetails) authentication).getUsername();
+		UserDetails principal = (UserDetails) authentication.getPrincipal();
+		return principal.getUsername();
 	}
 
 	@Secured(Roles.USER_CREATE)
@@ -92,7 +96,9 @@ public class UserController {
 
 	private User convert(UserRequest user) {
 		User mapped = modelMapper.map(user, User.class);
-		mapped.setPassword(passwordEncoder.encode(user.getPassword()));
+		if (user.getPassword() != null) {
+			mapped.setPassword(passwordEncoder.encode(user.getPassword()));
+		}
 		mapped.setAuthorities(roleService.findById(user.getAuthorities()));
 		return mapped;
 	}

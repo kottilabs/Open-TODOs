@@ -37,11 +37,21 @@ public class TodoService {
 	public Todo update(UUID scope, UUID id, Todo todo) {
 		Todo todoInDB = findById(scope, id);
 
-		todoInDB.setName(todo.getName());
-		todoInDB.setDescription(todo.getDescription());
-		todoInDB.setScope(todo.getScope());
-		todoInDB.setState(todo.getState());
-		todoInDB.setIcon(todo.getIcon());
+		if (todo.getName() != null) {
+			todoInDB.setName(todo.getName());
+		}
+		if (todo.getDescription() != null) {
+			todoInDB.setDescription(todo.getDescription());
+		}
+		if (todo.getScope() != null) {
+			todoInDB.setScope(todo.getScope());
+		}
+		if (todo.getState() != null) {
+			todoInDB.setState(todo.getState());
+		}
+		if (todo.getIcon() != null) {
+			todoInDB.setIcon(todo.getIcon());
+		}
 
 		return todoRepository.save(todoInDB);
 	}

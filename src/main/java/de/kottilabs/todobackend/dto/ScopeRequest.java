@@ -9,8 +9,14 @@ import javax.validation.constraints.NotNull;
 @Data
 public class ScopeRequest {
 
-	@NotNull
+	@NotNull(groups = Create.class)
 	private String name;
 
 	private UUID parentScope;
+
+	public interface Create {
+	}
+
+	public interface Update {
+	}
 }

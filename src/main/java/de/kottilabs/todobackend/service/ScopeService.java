@@ -27,10 +27,14 @@ public class ScopeService {
 	public Scope update(UUID id, Scope scope) {
 		Scope scopeInDB = findById(id);
 
-		scopeInDB.setName(scope.getName());
-		scopeInDB.setParentScope(scope.getParentScope());
+		if (scope.getName() != null) {
+			scopeInDB.setName(scope.getName());
+		}
+		if (scope.getParentScope() != null) {
+			scopeInDB.setParentScope(scope.getParentScope());
+		}
 
-		return scopeRepository.save(scope);
+		return scopeRepository.save(scopeInDB);
 	}
 
 	public Scope findById(UUID id) {

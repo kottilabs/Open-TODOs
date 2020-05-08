@@ -2,20 +2,20 @@ package de.kottilabs.todobackend.service;
 
 import java.util.*;
 
-import de.kottilabs.todobackend.advice.UserNotFoundException;
-import de.kottilabs.todobackend.dao.Role;
-import de.kottilabs.todobackend.dao.User;
-import de.kottilabs.todobackend.dao.UserRepository;
+import de.kottilabs.todobackend.advice.*;
+import de.kottilabs.todobackend.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import de.kottilabs.todobackend.advice.ScopeNotFoundException;
-import de.kottilabs.todobackend.dao.Scope;
 
 @Service
 public class UserService {
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private AuthTokenRepository authTokenRepository;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	public List<User> find() {
 		ArrayList<User> users = new ArrayList<>();
@@ -27,23 +27,49 @@ public class UserService {
 		return userRepository.save(user);
 	}
 
-	public User update(UUID id, User user) {
+	public User updateSelf(UUID id, User user) {
 		User userInDB = findById(id);
 		return updateUser(userInDB, user);
 	}
 
-	public User update(String username, User user) {
+	public User updateSelf(String username, User user, String prevPassword) {
 		User userInDB = findByUsername(username);
+
+		if (user.getPassword() != null) {
+			if (prevPassword == null) {
+				throw new PreviousPasswordMustBeSetException();
+			}
+
+			if (!passwordEncoder.matches(prevPassword, userInDB.getPassword())) {
+				throw new PreviousPasswordInvalidException();
+			}
+		}
+
+		if (user.getAuthorities() != null) {
+			throw new NotAllowedToSetAuthoritiesException();
+		}
+
 		return updateUser(userInDB, user);
 	}
 
 	private User updateUser(User userInDB, User user) {
-		userInDB.setUsername(user.getUsername());
-		userInDB.setPassword(user.getPassword());
-		userInDB.setDisplayname(user.getDisplayname());
-		userInDB.setEmail(user.getEmail());
+		if (user.getUsername() != null) {
+			userInDB.setUsername(user.getUsername());
+		}
+		if (user.getPassword() != null) {
+			userInDB.setPassword(user.getPassword());
+		}
+		if (user.getDisplayname() != null) {
+			userInDB.setDisplayname(user.getDisplayname());
+		}
+		if (user.getEmail() != null) {
+			userInDB.setEmail(user.getEmail());
+		}
+		if (user.getAuthorities() != null) {
+			userInDB.setAuthorities(user.getAuthorities());
+		}
 
-		return userRepository.save(user);
+		return userRepository.save(userInDB);
 	}
 
 	public User findById(UUID id) {

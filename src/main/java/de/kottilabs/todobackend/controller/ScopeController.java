@@ -35,13 +35,14 @@ public class ScopeController {
 
 	@Secured(Roles.SCOPE_CREATE)
 	@RequestMapping(method = RequestMethod.POST)
-	public ScopeResponse create(@RequestBody @Validated final ScopeRequest scope) {
+	public ScopeResponse create(@RequestBody @Validated(ScopeRequest.Create.class) final ScopeRequest scope) {
 		return convert(scopeService.save(convert(scope)));
 	}
 
 	@Secured(Roles.SCOPE_UPDATE)
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ScopeResponse update(@PathVariable final UUID id, @RequestBody @Validated final ScopeRequest scope) {
+	public ScopeResponse update(@PathVariable final UUID id,
+			@RequestBody @Validated(ScopeRequest.Update.class) final ScopeRequest scope) {
 		return convert(scopeService.update(id, convert(scope)));
 	}
 

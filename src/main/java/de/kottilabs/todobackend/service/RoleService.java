@@ -32,6 +32,9 @@ public class RoleService {
 	}
 
 	public Set<Role> findById(Collection<String> roles) {
+		if (roles == null) {
+			return null;
+		}
 		return roleRepository.findByRoleIn(roles);
 	}
 
