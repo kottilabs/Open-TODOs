@@ -1,6 +1,5 @@
 package de.kottilabs.todobackend.dao;
 
-import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;

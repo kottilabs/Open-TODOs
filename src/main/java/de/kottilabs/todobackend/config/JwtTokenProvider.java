@@ -6,11 +6,13 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -94,6 +96,15 @@ public class JwtTokenProvider {
 			return true;
 		} catch (JwtException | IllegalArgumentException e) {
 			return false;
+		}
+	}
+
+	@Scheduled(fixedRate = 10000)
+	@Transactional
+	public void dropExpiredTokens() {
+		long count = authTokenRepository.deleteByValidityLessThan(new Date().getTime());
+		if (count > 0) {
+			log.info("Dropped {} expired token(s)", count);
 		}
 	}
 }
