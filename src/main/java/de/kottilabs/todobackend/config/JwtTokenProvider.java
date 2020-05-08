@@ -64,7 +64,7 @@ public class JwtTokenProvider {
 		return token;
 	}
 
-	public Authentication getAuthentication(String token, ServletRequest req) {
+	public Authentication getAuthentication(ServletRequest req) {
 		AuthToken authToken = (AuthToken) req.getAttribute(JwtTokenProvider.AUTH_TOKEN);
 		List<String> roles = (List<String>) req.getAttribute(JwtTokenProvider.ROLES);
 		UserDetails userDetails = new User(authToken.getUsername(), authToken.getPassword(),
