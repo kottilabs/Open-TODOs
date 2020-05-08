@@ -37,14 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated()//
 				.and().exceptionHandling().authenticationEntryPoint(//
 						(httpServletRequest, httpServletResponse, e) -> {
-							final String expired = (String) httpServletRequest.getAttribute("expired");
-							if (expired != null) {
-								httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, expired);
-							} else {
-								log.warn("Not expected", e);
-								httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,
-										"Invalid username/password supplied");
-							}
+							httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+									"Token is invalid or expired");
 						})//
 				.and().apply(new JwtConfigurer(jwtTokenProvider));
 	}
