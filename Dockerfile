@@ -1,6 +1,7 @@
 FROM maven:3-jdk-12 AS MAVEN_TOOL_CHAIN
 WORKDIR /tmp/
 RUN mkdir db
+RUN mkdir secret
 COPY pom.xml /tmp/
 RUN mvn dependency:go-offline
 COPY src /tmp/src/
