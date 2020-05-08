@@ -17,5 +17,7 @@ public class AuthToken {
 	@Id
 	private long issuedAt;
 
+	private String password;
+
 	private long validity;
 }

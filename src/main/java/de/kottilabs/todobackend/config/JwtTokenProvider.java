@@ -3,8 +3,11 @@ package de.kottilabs.todobackend.config;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
@@ -15,8 +18,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import de.kottilabs.todobackend.dao.AuthToken;
@@ -25,14 +29,14 @@ import io.jsonwebtoken.*;
 
 @Component
 public class JwtTokenProvider {
+	private static final String AUTH_TOKEN = "auth-token";
+	private static final String ROLES = "roles";
 	private static Logger log = LoggerFactory.getLogger(JwtTokenProvider.class);
 
 	@Value("${security.jwt.token.secret-key:todoSecret}")
 	private String secretKey = "todoSecret";
 	@Value("${security.jwt.token.expire-length:180000}")
 	private long validityInMilliseconds = 180000; // 30 min
-	@Autowired
-	private UserDetailsService userDetailsService;
 	@Autowired
 	private AuthTokenRepository authTokenRepository;
 
@@ -41,7 +45,7 @@ public class JwtTokenProvider {
 		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
 	}
 
-	public String createToken(String username, List<String> roles) {
+	public String createToken(String username, String password, Set<String> roles) {
 		Claims claims = Jwts.claims().setSubject(username);
 		claims.put("roles", roles);
 		Date now = new Date();
@@ -53,19 +57,19 @@ public class JwtTokenProvider {
 		long validity = System.currentTimeMillis() + validityInMilliseconds;
 		AuthToken authToken = new AuthToken();
 		authToken.setUsername(username);
+		authToken.setPassword(password);
 		authToken.setIssuedAt(now.getTime() / 1000);
 		authToken.setValidity(validity);
 		authTokenRepository.save(authToken);
 		return token;
 	}
 
-	public Authentication getAuthentication(String token) {
-		UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
+	public Authentication getAuthentication(String token, ServletRequest req) {
+		AuthToken authToken = (AuthToken) req.getAttribute(JwtTokenProvider.AUTH_TOKEN);
+		List<String> roles = (List<String>) req.getAttribute(JwtTokenProvider.ROLES);
+		UserDetails userDetails = new User(authToken.getUsername(), authToken.getPassword(),
+				roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet()));
 		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-	}
-
-	public String getUsername(String token) {
-		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
 	}
 
 	public String resolveToken(HttpServletRequest req) {
@@ -76,7 +80,7 @@ public class JwtTokenProvider {
 		return null;
 	}
 
-	public boolean validateToken(String token) {
+	public boolean validateToken(String token, ServletRequest req) {
 		try {
 			Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
 			long now = System.currentTimeMillis();
@@ -88,6 +92,8 @@ public class JwtTokenProvider {
 			if (authToken == null) {
 				return false;
 			}
+			req.setAttribute(AUTH_TOKEN, authToken);
+			req.setAttribute(ROLES, body.get("roles"));
 
 			if (authToken.getValidity() < now + validityInMilliseconds / 2) {
 				log.info("Update validitiy of token from: {} for: {}", issuedAt, authToken.getUsername());

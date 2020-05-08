@@ -1,8 +1,8 @@
-FROM maven:3.5.2-jdk-8-alpine AS MAVEN_TOOL_CHAIN
+FROM maven:3-jdk-12 AS MAVEN_TOOL_CHAIN
 WORKDIR /tmp/
 RUN mkdir db
 COPY pom.xml /tmp/
-RUN mvn verify clean --fail-never
+RUN mvn dependency:go-offline
 COPY src /tmp/src/
 RUN mvn package
 
