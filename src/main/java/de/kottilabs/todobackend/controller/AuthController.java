@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import de.kottilabs.todobackend.dto.AuthResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -33,7 +34,7 @@ public class AuthController {
 	private PasswordEncoder passwordEncoder;
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ResponseEntity<Map<Object, Object>> login(@RequestBody AuthRequest data) {
+	public AuthResponse login(@RequestBody AuthRequest data) {
 		try {
 			String username = data.getUsername();
 			User user = this.userRepository.findByUsername(username)
@@ -45,11 +46,11 @@ public class AuthController {
 
 			Set<String> authorities = PermissionUtil.grantedAuthorityOf(user.getAuthorities());
 			String token = jwtTokenProvider.createToken(username, user.getPassword(), authorities);
-			Map<Object, Object> model = new HashMap<>();
-			model.put("username", username);
-			model.put("token", token);
-			model.put("authorities", authorities);
-			return ResponseEntity.ok(model);
+			AuthResponse authResponse = new AuthResponse();
+			authResponse.setUsername(username);
+			authResponse.setToken(token);
+			authResponse.setAuthorities(authorities);
+			return authResponse;
 		} catch (AuthenticationException e) {
 			throw new BadLoginException();
 		}
