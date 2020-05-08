@@ -72,7 +72,7 @@ public class JwtTokenProvider {
 		List<String> roles = (List<String>) req.getAttribute(JwtTokenProvider.ROLES);
 		UserDetails userDetails = new User(authToken.getUsername(), authToken.getPassword(),
 				roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet()));
-		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+		return new UsernamePasswordAuthenticationToken(userDetails, authToken, userDetails.getAuthorities());
 	}
 
 	public String resolveToken(HttpServletRequest req) {

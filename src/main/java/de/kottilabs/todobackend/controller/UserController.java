@@ -54,7 +54,7 @@ public class UserController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public UserResponse update(@PathVariable final UUID id,
 			@RequestBody @Validated(UserRequest.Update.class) final UserRequest user) {
-		return convert(userService.updateSelf(id, convert(user)));
+		return convert(userService.update(id, convert(user)));
 	}
 
 	@Secured(Roles.USER_READ)

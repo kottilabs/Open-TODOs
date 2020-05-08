@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class UserService {
 	@Autowired
@@ -27,11 +29,13 @@ public class UserService {
 		return userRepository.save(user);
 	}
 
-	public User updateSelf(UUID id, User user) {
+	@Transactional
+	public User update(UUID id, User user) {
 		User userInDB = findById(id);
 		return updateUser(userInDB, user);
 	}
 
+	@Transactional
 	public User updateSelf(String username, User user, String prevPassword) {
 		User userInDB = findByUsername(username);
 
@@ -52,7 +56,21 @@ public class UserService {
 		return updateUser(userInDB, user);
 	}
 
+	@Transactional
+	public long deleteByAuthToken(String username, long issuedAt) {
+		return authTokenRepository.deleteByUsernameAndIssuedAt(username, issuedAt);
+	}
+
+	@Transactional
+	public long deleteByUsername(String username) {
+		return authTokenRepository.deleteByUsername(username);
+	}
+
 	private User updateUser(User userInDB, User user) {
+		if (user.getAuthorities() != null) {
+			authTokenRepository.deleteByUsername(userInDB.getUsername());
+			userInDB.setAuthorities(user.getAuthorities());
+		}
 		if (user.getUsername() != null) {
 			userInDB.setUsername(user.getUsername());
 		}
@@ -64,9 +82,6 @@ public class UserService {
 		}
 		if (user.getEmail() != null) {
 			userInDB.setEmail(user.getEmail());
-		}
-		if (user.getAuthorities() != null) {
-			userInDB.setAuthorities(user.getAuthorities());
 		}
 
 		return userRepository.save(userInDB);
