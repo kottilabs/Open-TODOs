@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 
 public interface AuthTokenRepository extends CrudRepository<AuthToken, String> {
-	Optional<AuthToken> findByUsernameAndValidityGreaterThan(String username, long now);
+	Optional<AuthToken> findByUsernameAndIssuedAtAndValidityGreaterThan(String username, long issuedAt, long now);
 
 	long deleteByValidityLessThan(long now);
 }

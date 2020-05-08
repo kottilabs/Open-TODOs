@@ -51,6 +51,7 @@ public class JwtTokenProvider {
 		long validity = System.currentTimeMillis() + validityInMilliseconds;
 		AuthToken authToken = new AuthToken();
 		authToken.setUsername(username);
+		authToken.setIssuedAt(now.getTime() / 1000);
 		authToken.setValidity(validity);
 		authTokenRepository.save(authToken);
 		return token;
@@ -77,8 +78,9 @@ public class JwtTokenProvider {
 		try {
 			Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
 			long now = System.currentTimeMillis();
-			AuthToken authToken = authTokenRepository
-					.findByUsernameAndValidityGreaterThan(claims.getBody().getSubject(), now).orElse(null);
+			Claims body = claims.getBody();
+			AuthToken authToken = authTokenRepository.findByUsernameAndIssuedAtAndValidityGreaterThan(body.getSubject(),
+					body.getIssuedAt().getTime(), now).orElse(null);
 			if (authToken == null) {
 				return false;
 			}
