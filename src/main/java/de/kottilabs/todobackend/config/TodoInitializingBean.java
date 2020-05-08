@@ -1,13 +1,12 @@
 package de.kottilabs.todobackend.config;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Sets;
-import de.kottilabs.todobackend.dao.Role;
-import de.kottilabs.todobackend.dao.User;
-import de.kottilabs.todobackend.permission.Roles;
-import de.kottilabs.todobackend.service.RoleService;
-import de.kottilabs.todobackend.service.UserService;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -15,6 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Sets;
+
+import de.kottilabs.todobackend.dao.Role;
+import de.kottilabs.todobackend.dao.User;
+import de.kottilabs.todobackend.permission.Roles;
+import de.kottilabs.todobackend.service.RoleService;
+import de.kottilabs.todobackend.service.UserService;
+import net.bytebuddy.utility.RandomString;
 
 @Component
 public class TodoInitializingBean implements InitializingBean {
@@ -36,13 +46,44 @@ public class TodoInitializingBean implements InitializingBean {
 	@Value("${admin.displayname}")
 	private String adminDisplayname;
 
+	private String jwtSecret;
+
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	public String getJwtSecret() {
+		return jwtSecret;
+	}
+
 	@Override
 	public void afterPropertiesSet() throws Exception {
+		setUpRandomSecret();
 		Role adminRole = setUpRoles();
 		updateAdminUser(adminRole);
+	}
+
+	private void setUpRandomSecret() {
+		Path path = Paths.get("secret/secret");
+		if (path.toFile().exists()) {
+			try {
+				jwtSecret = new String(Files.readAllBytes(path));
+				log.info("Using existing secret");
+			} catch (IOException e) {
+				log.warn("Could not read secret", e);
+			}
+		}
+
+		if (jwtSecret == null) {
+			log.info("Generating new secret");
+			jwtSecret = RandomString.make(32);
+			try {
+				PrintWriter printWriter = new PrintWriter(path.toFile());
+				printWriter.write(jwtSecret);
+				printWriter.close();
+			} catch (FileNotFoundException e) {
+				log.warn("Could not store secret", e);
+			}
+		}
 	}
 
 	private Role setUpRoles() {

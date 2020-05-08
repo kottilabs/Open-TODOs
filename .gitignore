@@ -4,6 +4,7 @@ target/
 !**/src/main/**
 !**/src/test/**
 db/todo.db
+secret/secret
 
 ### STS ###
 .apt_generated

@@ -33,16 +33,19 @@ public class JwtTokenProvider {
 	private static final String ROLES = "roles";
 	private static Logger log = LoggerFactory.getLogger(JwtTokenProvider.class);
 
-	@Value("${security.jwt.token.secret-key:todoSecret}")
-	private String secretKey = "todoSecret";
-	@Value("${security.jwt.token.expire-length:18000000}")
-	private long validityInMilliseconds = 18000000; // 30 min
+	private String secretKey;
+
+	@Autowired
+	private TodoInitializingBean initializingBean;
 	@Autowired
 	private AuthTokenRepository authTokenRepository;
 
+	@Value("${security.jwt.token.expire-length:18000000}")
+	private long validityInMilliseconds = 18000000; // 30 min
+
 	@PostConstruct
 	protected void init() {
-		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+		secretKey = Base64.getEncoder().encodeToString(initializingBean.getJwtSecret().getBytes());
 	}
 
 	public String createToken(String username, String password, Set<String> roles) {
