@@ -41,7 +41,7 @@ public class ScopeController {
 	@Secured(Roles.SCOPE_CREATE)
 	@RequestMapping(method = RequestMethod.POST)
 	public ScopeResponse create(
-			@ApiParam(value = "Scope to create", required = true) @RequestBody @Validated(ScopeRequest.Create.class) final ScopeRequest scope) {
+			@ApiParam(value = "Scope to create", required = true, type = "ScopeRequest") @RequestBody @Validated(ScopeRequest.Create.class) final ScopeRequest scope) {
 		return convert(scopeService.save(convert(scope)));
 	}
 
@@ -51,7 +51,7 @@ public class ScopeController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ScopeResponse update(
 			@ApiParam(value = SpringFoxConfig.SCOPE_ID, required = true) @PathVariable final UUID id,
-			@ApiParam(value = SpringFoxConfig.UPDATE_REQUEST, required = true) @RequestBody @Validated(ScopeRequest.Update.class) final ScopeRequest scope) {
+			@ApiParam(value = SpringFoxConfig.UPDATE_REQUEST, required = true, type = "ScopeRequest") @RequestBody @Validated(ScopeRequest.Update.class) final ScopeRequest scope) {
 		return convert(scopeService.update(id, convert(scope)));
 	}
 

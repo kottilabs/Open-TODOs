@@ -41,7 +41,8 @@ public class AuthController {
 
 	@ApiOperation(value = "Login", nickname = "login")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public AuthResponse login(@ApiParam(value = "Login credentials", required = true) @RequestBody AuthRequest data) {
+	public AuthResponse login(
+			@ApiParam(value = "Login credentials", required = true, type = "AuthRequest") @RequestBody AuthRequest data) {
 		try {
 			String username = data.getUsername();
 			User user = this.userService.findByUsernameOrNull(username);

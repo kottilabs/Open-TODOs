@@ -54,7 +54,7 @@ public class UserController {
 	@Secured(Roles.USER_CREATE)
 	@RequestMapping(method = RequestMethod.POST)
 	public UserResponse create(
-			@ApiParam(value = "User to create", required = true) @RequestBody @Validated(UserRequest.Create.class) final UserRequest user) {
+			@ApiParam(value = "User to create", required = true, type = "UserRequest") @RequestBody @Validated(UserRequest.Create.class) final UserRequest user) {
 		return convert(userService.save(convert(user)));
 	}
 
@@ -63,7 +63,7 @@ public class UserController {
 	@Secured(Roles.USER_UPDATE)
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public UserResponse update(@ApiParam(value = SpringFoxConfig.USER_ID, required = true) @PathVariable final UUID id,
-			@ApiParam(value = SpringFoxConfig.UPDATE_REQUEST, required = true) @RequestBody @Validated(UserRequest.Update.class) final UserRequest user) {
+			@ApiParam(value = SpringFoxConfig.UPDATE_REQUEST, required = true, type = "UserRequest") @RequestBody @Validated(UserRequest.Update.class) final UserRequest user) {
 		return convert(userService.update(id, convert(user)));
 	}
 
@@ -84,7 +84,7 @@ public class UserController {
 	@ApiOperation(value = "Update own user", nickname = "updateSelf")
 	@RequestMapping(value = "/self", method = RequestMethod.PUT)
 	public UserResponse updateSelf(
-			@ApiParam(value = SpringFoxConfig.UPDATE_REQUEST, required = true) @RequestBody @Validated(UserRequest.Update.class) final UserRequest user,
+			@ApiParam(value = SpringFoxConfig.UPDATE_REQUEST, required = true, type = "UserRequest") @RequestBody @Validated(UserRequest.Update.class) final UserRequest user,
 			@ApiIgnore Authentication authentication) {
 		String username = getUsername(authentication);
 		return convert(userService.updateSelf(username, convert(user), user.getPrevPassword()));
