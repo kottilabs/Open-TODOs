@@ -4,26 +4,31 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import de.kottilabs.todobackend.permission.Roles;
+import io.swagger.annotations.ApiParam;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import de.kottilabs.todobackend.config.SpringFoxConfig;
 import de.kottilabs.todobackend.dao.Role;
 import de.kottilabs.todobackend.dao.User;
 import de.kottilabs.todobackend.dto.UserRequest;
 import de.kottilabs.todobackend.dto.UserResponse;
+import de.kottilabs.todobackend.permission.Roles;
 import de.kottilabs.todobackend.service.RoleService;
 import de.kottilabs.todobackend.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping(value = { "/api/user" })
+@Api(tags = SpringFoxConfig.USER)
 public class UserController {
 
 	@Autowired
@@ -37,6 +42,7 @@ public class UserController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@ApiOperation(value = "Find all users", notes = "Accessible with: " + Roles.USER_READ)
 	@Secured(Roles.USER_READ)
 	@RequestMapping(method = RequestMethod.GET)
 	public List<UserResponse> find() {
@@ -44,34 +50,41 @@ public class UserController {
 		return results.stream().map(this::convert).collect(Collectors.toList());
 	}
 
+	@ApiOperation(value = "Create a user", notes = "Accessible with: " + Roles.USER_CREATE)
 	@Secured(Roles.USER_CREATE)
 	@RequestMapping(method = RequestMethod.POST)
-	public UserResponse create(@RequestBody @Validated(UserRequest.Create.class) final UserRequest user) {
+	public UserResponse create(
+			@ApiParam(value = "User to create", required = true) @RequestBody @Validated(UserRequest.Create.class) final UserRequest user) {
 		return convert(userService.save(convert(user)));
 	}
 
+	@ApiOperation(value = "Update a specific user", notes = "Accessible with: " + Roles.USER_UPDATE)
 	@Secured(Roles.USER_UPDATE)
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public UserResponse update(@PathVariable final UUID id,
-			@RequestBody @Validated(UserRequest.Update.class) final UserRequest user) {
+	public UserResponse update(@ApiParam(value = SpringFoxConfig.USER_ID, required = true) @PathVariable final UUID id,
+			@ApiParam(value = SpringFoxConfig.UPDATE_REQUEST, required = true) @RequestBody @Validated(UserRequest.Update.class) final UserRequest user) {
 		return convert(userService.update(id, convert(user)));
 	}
 
+	@ApiOperation(value = "Get a specific user", notes = "Accessible with: " + Roles.USER_READ)
 	@Secured(Roles.USER_READ)
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public UserResponse get(@PathVariable final UUID id) {
+	public UserResponse get(@ApiParam(value = SpringFoxConfig.USER_ID, required = true) @PathVariable final UUID id) {
 		return convert(userService.findById(id));
 	}
 
+	@ApiOperation(value = "Update own user")
 	@RequestMapping(value = "/self", method = RequestMethod.PUT)
-	public UserResponse updateSelf(@RequestBody @Validated(UserRequest.Update.class) final UserRequest user,
-			Authentication authentication) {
+	public UserResponse updateSelf(
+			@ApiParam(value = SpringFoxConfig.UPDATE_REQUEST, required = true) @RequestBody @Validated(UserRequest.Update.class) final UserRequest user,
+			@ApiIgnore Authentication authentication) {
 		String username = getUsername(authentication);
 		return convert(userService.updateSelf(username, convert(user), user.getPrevPassword()));
 	}
 
+	@ApiOperation(value = "Get own user")
 	@RequestMapping(value = "/self", method = RequestMethod.GET)
-	public UserResponse getSelf(Authentication authentication) {
+	public UserResponse getSelf(@ApiIgnore Authentication authentication) {
 		String username = getUsername(authentication);
 		return convert(userService.findByUsername(username));
 	}
@@ -81,9 +94,11 @@ public class UserController {
 		return principal.getUsername();
 	}
 
+	@ApiOperation(value = "Delete a specific user", notes = "Accessible with: " + Roles.USER_CREATE)
 	@Secured(Roles.USER_CREATE)
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public UserResponse delete(@PathVariable final UUID id) {
+	public UserResponse delete(
+			@ApiParam(value = SpringFoxConfig.USER_ID, required = true) @PathVariable final UUID id) {
 		return convert(userService.delete(id));
 	}
 

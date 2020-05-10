@@ -1,6 +1,8 @@
 package de.kottilabs.todobackend.permission;
 
+import javax.validation.constraints.NotNull;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,5 +37,14 @@ public abstract class Roles {
 			}
 			ALL_ROLES.add(name);
 		}
+	}
+
+	@NotNull
+	public static String descriptionFor(String... roles) {
+		StringBuilder s = new StringBuilder("Role needed: ");
+		for (String role : roles) {
+			s.append("\n\t * ").append(role);
+		}
+		return s.toString();
 	}
 }

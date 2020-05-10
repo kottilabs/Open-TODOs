@@ -2,7 +2,7 @@ package de.kottilabs.todobackend.controller;
 
 import java.util.Set;
 
-import de.kottilabs.todobackend.dao.AuthToken;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,15 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.kottilabs.todobackend.advice.BadLoginException;
 import de.kottilabs.todobackend.config.JwtTokenProvider;
+import de.kottilabs.todobackend.config.SpringFoxConfig;
+import de.kottilabs.todobackend.dao.AuthToken;
 import de.kottilabs.todobackend.dao.User;
 import de.kottilabs.todobackend.dto.AuthLogoutResponse;
 import de.kottilabs.todobackend.dto.AuthRequest;
 import de.kottilabs.todobackend.dto.AuthResponse;
 import de.kottilabs.todobackend.permission.PermissionUtil;
 import de.kottilabs.todobackend.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/api/auth")
+@Api(tags = SpringFoxConfig.AUTHENTICATION)
 public class AuthController {
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
@@ -33,8 +39,9 @@ public class AuthController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@ApiOperation("Login")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public AuthResponse login(@RequestBody AuthRequest data) {
+	public AuthResponse login(@ApiParam(value = "Login credentials", required = true) @RequestBody AuthRequest data) {
 		try {
 			String username = data.getUsername();
 			User user = this.userService.findByUsernameOrNull(username);
@@ -58,14 +65,16 @@ public class AuthController {
 		}
 	}
 
+	@ApiOperation("Logout a specific token")
 	@RequestMapping(value = "/logout", method = RequestMethod.POST)
-	public AuthLogoutResponse logout(Authentication authentication) {
+	public AuthLogoutResponse logout(@ApiIgnore Authentication authentication) {
 		AuthToken authToken = (AuthToken) authentication.getCredentials();
 		return convert(userService.deleteByAuthToken(authToken.getUsername(), authToken.getIssuedAt()));
 	}
 
+	@ApiOperation("Logout all tokens from my username")
 	@RequestMapping(value = "/logoutAll", method = RequestMethod.POST)
-	public AuthLogoutResponse logoutAll(Authentication authentication) {
+	public AuthLogoutResponse logoutAll(@ApiIgnore Authentication authentication) {
 		AuthToken authToken = (AuthToken) authentication.getCredentials();
 		return convert(userService.deleteByUsername(authToken.getUsername()));
 	}

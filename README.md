@@ -15,3 +15,15 @@ If you're running your application outside Docker just use the normal ``JAVA_OPT
 
 ##### Enable Swagger-UI
 > ``-Dspring.profiles.active=swagger``
+
+## Documentation
+
+##### Build Documentation
+Latest documentation can be found under:  
+[Documentation](https://htmlpreview.github.io/?https://github.com/kottilabs/Open-TODOs/blob/master/docs/index.html)
+
+> Download latest Swagger Code Gen version:  
+> https://swagger.io/tools/swagger-codegen/download/
+
+> Run backend locally or inside docker with port ``8080`` exposed and then run:  
+> ``java -jar swagger-codegen-cli-2.4.13.jar generate -i "http://localhost:8080/v2/api-docs" -l html2 -o .``
