@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Swagger Code Gen ###
+docs/.swagger-codegen-ignore
+docs/.swagger-codegen
+docs/swagger-codegen-*.jar
