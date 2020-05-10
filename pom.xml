@@ -97,6 +97,12 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>build-info</id>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                    <execution>
                         <goals>
                             <goal>repackage</goal>
                         </goals>

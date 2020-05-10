@@ -1,9 +1,16 @@
 package de.kottilabs.todobackend.config;
 
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -35,8 +42,13 @@ public class SpringFoxConfig {
 	public static final String TODO_ID = "The todos id";
 	public static final String USER_ID = "The users id";
 
+	@Autowired
+	private BuildProperties buildProperties;
+
 	@Bean
 	public Docket api() {
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(Locale.UK);
 
 		final List<ResponseMessage> globalResponses = Arrays.asList(
 				new ResponseMessageBuilder().code(200).message("OK").build(),
@@ -46,7 +58,11 @@ public class SpringFoxConfig {
 				new ResponseMessageBuilder().code(404).message("The resource you were trying to reach is not found")
 						.build());
 
-		ApiInfo apiInfo = new ApiInfoBuilder().title("OpenTODO API").version("1.0.0").build();
+		ApiInfo apiInfo = new ApiInfoBuilder().title("OpenTODO API")
+				.description("Open-TODOs is an Open Source API to manage and share tasks in a secure manner")
+				.version(buildProperties.getVersion() + " ( " + buildProperties.getTime().atZone(ZoneId.of("UTC"))
+						+ " )")
+				.build();
 
 		return new Docket(DocumentationType.SWAGGER_2).select()
 				.apis(RequestHandlerSelectors.basePackage("de.kottilabs.todobackend")).paths(PathSelectors.any())
