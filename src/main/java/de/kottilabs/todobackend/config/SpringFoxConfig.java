@@ -77,6 +77,7 @@ public class SpringFoxConfig {
 						new Tag(USER, "User Endpoints"))
 				.securitySchemes(Collections.singletonList(new ApiKey("JWT", "Authorization", "header")))
 				.securityContexts(Collections.singletonList(SecurityContext.builder()
+						.forPaths(PathSelectors.regex("^(?!\\/api\\/auth\\/login$).*$"))
 						.securityReferences(Collections.singletonList(
 								SecurityReference.builder().reference("JWT").scopes(new AuthorizationScope[0]).build()))
 						.build()));

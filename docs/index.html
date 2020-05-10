@@ -1057,7 +1057,7 @@ margin-bottom: 20px;
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Authentication-login-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X POST -H "Authorization: [[apiKey]]" "https://localhost:8080/api/auth/login"</code></pre>
+                            <pre class="prettyprint"><code class="language-bsh">curl -X POST "https://localhost:8080/api/auth/login"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Authentication-login-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -1071,14 +1071,7 @@ import java.util.*;
 public class AuthenticationApiExample {
 
     public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
         
-        // Configure API key authorization: JWT
-        ApiKeyAuth JWT = (ApiKeyAuth) defaultClient.getAuthentication("JWT");
-        JWT.setApiKey("YOUR API KEY");
-        // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-        //JWT.setApiKeyPrefix("Token");
-
         AuthenticationApi apiInstance = new AuthenticationApi();
         AuthRequest data = ; // AuthRequest | Login credentials
         try {
@@ -1115,14 +1108,7 @@ public class AuthenticationApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Authentication-login-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
-
-// Configure API key authorization: (authentication scheme: JWT)
-[apiConfig setApiKey:@"YOUR_API_KEY" forApiKeyIdentifier:@"Authorization"];
-// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
-//[apiConfig setApiKeyPrefix:@"Bearer" forApiKeyIdentifier:@"Authorization"];
-
-AuthRequest *data = ; // Login credentials
+                              <pre class="prettyprint"><code class="language-cpp">AuthRequest *data = ; // Login credentials
 
 AuthenticationApi *apiInstance = [[AuthenticationApi alloc] init];
 
@@ -1141,13 +1127,6 @@ AuthenticationApi *apiInstance = [[AuthenticationApi alloc] init];
 
                             <div class="tab-pane" id="examples-Authentication-login-0-javascript">
                               <pre class="prettyprint"><code class="language-js">var OpenTodoApi = require('open_todo_api');
-var defaultClient = OpenTodoApi.ApiClient.instance;
-
-// Configure API key authorization: JWT
-var JWT = defaultClient.authentications['JWT'];
-JWT.apiKey = "YOUR API KEY"
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//JWT.apiKeyPrefix['Authorization'] = "Token"
 
 var api = new OpenTodoApi.AuthenticationApi()
 
@@ -1182,11 +1161,6 @@ namespace Example
         public void main()
         {
             
-            // Configure API key authorization: JWT
-            Configuration.Default.ApiKey.Add("Authorization", "YOUR_API_KEY");
-            // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
-            // Configuration.Default.ApiKeyPrefix.Add("Authorization", "Bearer");
-
             var apiInstance = new AuthenticationApi();
             var data = new AuthRequest(); // AuthRequest | Login credentials
 
@@ -1210,11 +1184,6 @@ namespace Example
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-// Configure API key authorization: JWT
-Swagger\Client\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
-// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
-// Swagger\Client\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
-
 $api_instance = new Swagger\Client\Api\AuthenticationApi();
 $data = ; // AuthRequest | Login credentials
 
@@ -1231,11 +1200,6 @@ try {
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::AuthenticationApi;
-
-# Configure API key authorization: JWT
-$WWW::SwaggerClient::Configuration::api_key->{'Authorization'} = 'YOUR_API_KEY';
-# uncomment below to setup prefix (e.g. Bearer) for API key, if needed
-#$WWW::SwaggerClient::Configuration::api_key_prefix->{'Authorization'} = "Bearer";
 
 my $api_instance = WWW::SwaggerClient::AuthenticationApi->new();
 my $data = WWW::SwaggerClient::Object::AuthRequest->new(); # AuthRequest | Login credentials
@@ -1255,11 +1219,6 @@ import time
 import swagger_client
 from swagger_client.rest import ApiException
 from pprint import pprint
-
-# Configure API key authorization: JWT
-swagger_client.configuration.api_key['Authorization'] = 'YOUR_API_KEY'
-# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
-# swagger_client.configuration.api_key_prefix['Authorization'] = 'Bearer'
 
 # create an instance of the API class
 api_instance = swagger_client.AuthenticationApi()
