@@ -48,8 +48,6 @@ public class SpringFoxConfig {
 	@Bean
 	public Docket api() {
 
-		DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(Locale.UK);
-
 		final List<ResponseMessage> globalResponses = Arrays.asList(
 				new ResponseMessageBuilder().code(200).message("OK").build(),
 				new ResponseMessageBuilder().code(400).message("Bad Request").build(),

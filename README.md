@@ -10,18 +10,18 @@ All options inside the docker container have to be set via the Environment Varia
 If you're running your application outside Docker just use the normal ``JAVA_OPTS``. For example:
 > ``java -Dspring.profiles.active=swagger -jar app.jar``   
 
-##### Override default admin user details
+### Override default admin user details
 > ``-Dadmin.username=myAdmin -Dadmin.password=myPassword -Dadmin.displayname=MyAdmin``
 
-##### Enable Swagger-UI
+### Enable Swagger-UI
 > ``-Dspring.profiles.active=swagger``
 
 ## Documentation
 
-##### Build Documentation
 Latest documentation can be found under:  
 [Documentation](https://raw.githack.com/kottilabs/Open-TODOs/master/docs/index.html)
 
+### Build Documentation
 > Download latest Swagger Code Gen version:  
 > https://swagger.io/tools/swagger-codegen/download/
 
