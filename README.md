@@ -20,7 +20,7 @@ If you're running your application outside Docker just use the normal ``JAVA_OPT
 
 ##### Build Documentation
 Latest documentation can be found under:  
-[Documentation](https://htmlpreview.github.io/?https://github.com/kottilabs/Open-TODOs/blob/master/docs/index.html)
+[Documentation](https://raw.githack.com/kottilabs/Open-TODOs/master/docs/index.html)
 
 > Download latest Swagger Code Gen version:  
 > https://swagger.io/tools/swagger-codegen/download/

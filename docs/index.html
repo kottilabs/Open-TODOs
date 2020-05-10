@@ -954,11 +954,11 @@ margin-bottom: 20px;
                     <li data-group="Scopes" data-name="deleteScope" class="">
                       <a href="#api-Scopes-deleteScope">deleteScope</a>
                     </li>
+                    <li data-group="Scopes" data-name="findChildScopes" class="">
+                      <a href="#api-Scopes-findChildScopes">findChildScopes</a>
+                    </li>
                     <li data-group="Scopes" data-name="findScopes" class="">
                       <a href="#api-Scopes-findScopes">findScopes</a>
-                    </li>
-                    <li data-group="Scopes" data-name="getChildScopes" class="">
-                      <a href="#api-Scopes-getChildScopes">getChildScopes</a>
                     </li>
                     <li data-group="Scopes" data-name="getScope" class="">
                       <a href="#api-Scopes-getScope">getScope</a>
@@ -2800,6 +2800,377 @@ except ApiException as e:
                         </article>
                       </div>
                       <hr>
+                    <div id="api-Scopes-findChildScopes">
+                      <article id="api-Scopes-findChildScopes-0" data-group="User" data-name="findChildScopes" data-version="0">
+                        <div class="pull-left">
+                          <h1>findChildScopes</h1>
+                          <p>Find all children of specific scope</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Accessible with: SCOPE_READ</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/api/scope/{id}/childs</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Scopes-findChildScopes-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Scopes-findChildScopes-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Scopes-findChildScopes-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Scopes-findChildScopes-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Scopes-findChildScopes-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Scopes-findChildScopes-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Scopes-findChildScopes-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Scopes-findChildScopes-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Scopes-findChildScopes-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Scopes-findChildScopes-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Scopes-findChildScopes-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Scopes-findChildScopes-0-curl">
+                            <pre class="prettyprint"><code class="language-bsh">curl -X GET -H "Authorization: [[apiKey]]" "https://localhost:8080/api/scope/{id}/childs"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Scopes-findChildScopes-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.ScopesApi;
+
+import java.io.File;
+import java.util.*;
+
+public class ScopesApiExample {
+
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        
+        // Configure API key authorization: JWT
+        ApiKeyAuth JWT = (ApiKeyAuth) defaultClient.getAuthentication("JWT");
+        JWT.setApiKey("YOUR API KEY");
+        // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+        //JWT.setApiKeyPrefix("Token");
+
+        ScopesApi apiInstance = new ScopesApi();
+        UUID id = ; // UUID | The scopes id
+        try {
+            array[ScopeResponse] result = apiInstance.findChildScopes(id);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ScopesApi#findChildScopes");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Scopes-findChildScopes-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.ScopesApi;
+
+public class ScopesApiExample {
+
+    public static void main(String[] args) {
+        ScopesApi apiInstance = new ScopesApi();
+        UUID id = ; // UUID | The scopes id
+        try {
+            array[ScopeResponse] result = apiInstance.findChildScopes(id);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ScopesApi#findChildScopes");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Scopes-findChildScopes-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Scopes-findChildScopes-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+
+// Configure API key authorization: (authentication scheme: JWT)
+[apiConfig setApiKey:@"YOUR_API_KEY" forApiKeyIdentifier:@"Authorization"];
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+//[apiConfig setApiKeyPrefix:@"Bearer" forApiKeyIdentifier:@"Authorization"];
+
+UUID *id = ; // The scopes id
+
+ScopesApi *apiInstance = [[ScopesApi alloc] init];
+
+// Find all children of specific scope
+[apiInstance findChildScopesWith:id
+              completionHandler: ^(array[ScopeResponse] output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Scopes-findChildScopes-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var OpenTodoApi = require('open_todo_api');
+var defaultClient = OpenTodoApi.ApiClient.instance;
+
+// Configure API key authorization: JWT
+var JWT = defaultClient.authentications['JWT'];
+JWT.apiKey = "YOUR API KEY"
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//JWT.apiKeyPrefix['Authorization'] = "Token"
+
+var api = new OpenTodoApi.ScopesApi()
+
+var id = ; // {UUID} The scopes id
+
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.findChildScopes(id, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Scopes-findChildScopes-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Scopes-findChildScopes-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class findChildScopesExample
+    {
+        public void main()
+        {
+            
+            // Configure API key authorization: JWT
+            Configuration.Default.ApiKey.Add("Authorization", "YOUR_API_KEY");
+            // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+            // Configuration.Default.ApiKeyPrefix.Add("Authorization", "Bearer");
+
+            var apiInstance = new ScopesApi();
+            var id = new UUID(); // UUID | The scopes id
+
+            try
+            {
+                // Find all children of specific scope
+                array[ScopeResponse] result = apiInstance.findChildScopes(id);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling ScopesApi.findChildScopes: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Scopes-findChildScopes-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Configure API key authorization: JWT
+Swagger\Client\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// Swagger\Client\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
+
+$api_instance = new Swagger\Client\Api\ScopesApi();
+$id = ; // UUID | The scopes id
+
+try {
+    $result = $api_instance->findChildScopes($id);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling ScopesApi->findChildScopes: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Scopes-findChildScopes-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::ScopesApi;
+
+# Configure API key authorization: JWT
+$WWW::SwaggerClient::Configuration::api_key->{'Authorization'} = 'YOUR_API_KEY';
+# uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+#$WWW::SwaggerClient::Configuration::api_key_prefix->{'Authorization'} = "Bearer";
+
+my $api_instance = WWW::SwaggerClient::ScopesApi->new();
+my $id = ; # UUID | The scopes id
+
+eval { 
+    my $result = $api_instance->findChildScopes(id => $id);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling ScopesApi->findChildScopes: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Scopes-findChildScopes-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# Configure API key authorization: JWT
+swagger_client.configuration.api_key['Authorization'] = 'YOUR_API_KEY'
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# swagger_client.configuration.api_key_prefix['Authorization'] = 'Bearer'
+
+# create an instance of the API class
+api_instance = swagger_client.ScopesApi()
+id =  # UUID | The scopes id
+
+try: 
+    # Find all children of specific scope
+    api_response = api_instance.find_child_scopes(id)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling ScopesApi->findChildScopes: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">id*</td>
+<td>
+
+
+    <div id="d2e199_findChildScopes_id">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    UUID
+                </span>
+                    <span class="format">
+                        (uuid)
+                    </span>
+
+                    <div class="inner description">
+                        The scopes id
+                    </div>
+            </div>
+                <div class="inner required">
+                    Required
+                </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                            </table>
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-findChildScopes-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-findChildScopes-200-schema">
+                                  <div id='responses-findChildScopes-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "OK",
+  "schema" : {
+    "type" : "array",
+    "items" : {
+      "$ref" : "#/definitions/ScopeResponse"
+    }
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-findChildScopes-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-findChildScopes-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-findChildScopes-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 400 - Bad Request </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                            <h3> Status: 401 - Your token is invalid or expired </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                            <h3> Status: 403 - You dont have permission to do this </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                            <h3> Status: 404 - The resource you were trying to reach is not found </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
                     <div id="api-Scopes-findScopes">
                       <article id="api-Scopes-findScopes-0" data-group="User" data-name="findScopes" data-version="0">
                         <div class="pull-left">
@@ -3090,377 +3461,6 @@ except ApiException as e:
                                     </script>
                                   </div>
                                   <input id='responses-findScopes-200-schema-data' type='hidden' value=''></input>
-                                </div>
-                            </div>
-
-                            <h3> Status: 400 - Bad Request </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                            </div>
-
-                            <h3> Status: 401 - Your token is invalid or expired </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                            </div>
-
-                            <h3> Status: 403 - You dont have permission to do this </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                            </div>
-
-                            <h3> Status: 404 - The resource you were trying to reach is not found </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                            </div>
-
-                        </article>
-                      </div>
-                      <hr>
-                    <div id="api-Scopes-getChildScopes">
-                      <article id="api-Scopes-getChildScopes-0" data-group="User" data-name="getChildScopes" data-version="0">
-                        <div class="pull-left">
-                          <h1>getChildScopes</h1>
-                          <p>Find all children of specific scope</p>
-                        </div>
-                        <div class="pull-right"></div>
-                        <div class="clearfix"></div>
-                        <p></p>
-                        <p class="marked">Accessible with: SCOPE_READ</p>
-                        <p></p>
-                        <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/api/scope/{id}/childs</span></code></pre>
-                        <p>
-                          <h3>Usage and SDK Samples</h3>
-                        </p>
-                        <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Scopes-getChildScopes-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Scopes-getChildScopes-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Scopes-getChildScopes-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Scopes-getChildScopes-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Scopes-getChildScopes-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Scopes-getChildScopes-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Scopes-getChildScopes-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Scopes-getChildScopes-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Scopes-getChildScopes-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Scopes-getChildScopes-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Scopes-getChildScopes-0-python">Python</a></li>
-                        </ul>
-
-                        <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Scopes-getChildScopes-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X GET -H "Authorization: [[apiKey]]" "https://localhost:8080/api/scope/{id}/childs"</code></pre>
-                          </div>
-                          <div class="tab-pane" id="examples-Scopes-getChildScopes-0-java">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
-import io.swagger.client.auth.*;
-import io.swagger.client.model.*;
-import io.swagger.client.api.ScopesApi;
-
-import java.io.File;
-import java.util.*;
-
-public class ScopesApiExample {
-
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        
-        // Configure API key authorization: JWT
-        ApiKeyAuth JWT = (ApiKeyAuth) defaultClient.getAuthentication("JWT");
-        JWT.setApiKey("YOUR API KEY");
-        // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-        //JWT.setApiKeyPrefix("Token");
-
-        ScopesApi apiInstance = new ScopesApi();
-        UUID id = ; // UUID | The scopes id
-        try {
-            array[ScopeResponse] result = apiInstance.getChildScopes(id);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ScopesApi#getChildScopes");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-
-                          <div class="tab-pane" id="examples-Scopes-getChildScopes-0-android">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.ScopesApi;
-
-public class ScopesApiExample {
-
-    public static void main(String[] args) {
-        ScopesApi apiInstance = new ScopesApi();
-        UUID id = ; // UUID | The scopes id
-        try {
-            array[ScopeResponse] result = apiInstance.getChildScopes(id);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ScopesApi#getChildScopes");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-  <!--
-  <div class="tab-pane" id="examples-Scopes-getChildScopes-0-groovy">
-  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-  </div> -->
-                            <div class="tab-pane" id="examples-Scopes-getChildScopes-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
-
-// Configure API key authorization: (authentication scheme: JWT)
-[apiConfig setApiKey:@"YOUR_API_KEY" forApiKeyIdentifier:@"Authorization"];
-// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
-//[apiConfig setApiKeyPrefix:@"Bearer" forApiKeyIdentifier:@"Authorization"];
-
-UUID *id = ; // The scopes id
-
-ScopesApi *apiInstance = [[ScopesApi alloc] init];
-
-// Find all children of specific scope
-[apiInstance getChildScopesWith:id
-              completionHandler: ^(array[ScopeResponse] output, NSError* error) {
-                            if (output) {
-                                NSLog(@"%@", output);
-                            }
-                            if (error) {
-                                NSLog(@"Error: %@", error);
-                            }
-                        }];
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Scopes-getChildScopes-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var OpenTodoApi = require('open_todo_api');
-var defaultClient = OpenTodoApi.ApiClient.instance;
-
-// Configure API key authorization: JWT
-var JWT = defaultClient.authentications['JWT'];
-JWT.apiKey = "YOUR API KEY"
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//JWT.apiKeyPrefix['Authorization'] = "Token"
-
-var api = new OpenTodoApi.ScopesApi()
-
-var id = ; // {UUID} The scopes id
-
-
-var callback = function(error, data, response) {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
-};
-api.getChildScopes(id, callback);
-</code></pre>
-                            </div>
-
-                            <!--<div class="tab-pane" id="examples-Scopes-getChildScopes-0-angular">
-              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-            </div>-->
-                            <div class="tab-pane" id="examples-Scopes-getChildScopes-0-csharp">
-                              <pre class="prettyprint"><code class="language-cs">using System;
-using System.Diagnostics;
-using IO.Swagger.Api;
-using IO.Swagger.Client;
-using IO.Swagger.Model;
-
-namespace Example
-{
-    public class getChildScopesExample
-    {
-        public void main()
-        {
-            
-            // Configure API key authorization: JWT
-            Configuration.Default.ApiKey.Add("Authorization", "YOUR_API_KEY");
-            // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
-            // Configuration.Default.ApiKeyPrefix.Add("Authorization", "Bearer");
-
-            var apiInstance = new ScopesApi();
-            var id = new UUID(); // UUID | The scopes id
-
-            try
-            {
-                // Find all children of specific scope
-                array[ScopeResponse] result = apiInstance.getChildScopes(id);
-                Debug.WriteLine(result);
-            }
-            catch (Exception e)
-            {
-                Debug.Print("Exception when calling ScopesApi.getChildScopes: " + e.Message );
-            }
-        }
-    }
-}
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Scopes-getChildScopes-0-php">
-                              <pre class="prettyprint"><code class="language-php"><&#63;php
-require_once(__DIR__ . '/vendor/autoload.php');
-
-// Configure API key authorization: JWT
-Swagger\Client\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
-// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
-// Swagger\Client\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
-
-$api_instance = new Swagger\Client\Api\ScopesApi();
-$id = ; // UUID | The scopes id
-
-try {
-    $result = $api_instance->getChildScopes($id);
-    print_r($result);
-} catch (Exception $e) {
-    echo 'Exception when calling ScopesApi->getChildScopes: ', $e->getMessage(), PHP_EOL;
-}
-?></code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Scopes-getChildScopes-0-perl">
-                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
-use WWW::SwaggerClient::Configuration;
-use WWW::SwaggerClient::ScopesApi;
-
-# Configure API key authorization: JWT
-$WWW::SwaggerClient::Configuration::api_key->{'Authorization'} = 'YOUR_API_KEY';
-# uncomment below to setup prefix (e.g. Bearer) for API key, if needed
-#$WWW::SwaggerClient::Configuration::api_key_prefix->{'Authorization'} = "Bearer";
-
-my $api_instance = WWW::SwaggerClient::ScopesApi->new();
-my $id = ; # UUID | The scopes id
-
-eval { 
-    my $result = $api_instance->getChildScopes(id => $id);
-    print Dumper($result);
-};
-if ($@) {
-    warn "Exception when calling ScopesApi->getChildScopes: $@\n";
-}</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Scopes-getChildScopes-0-python">
-                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
-import time
-import swagger_client
-from swagger_client.rest import ApiException
-from pprint import pprint
-
-# Configure API key authorization: JWT
-swagger_client.configuration.api_key['Authorization'] = 'YOUR_API_KEY'
-# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
-# swagger_client.configuration.api_key_prefix['Authorization'] = 'Bearer'
-
-# create an instance of the API class
-api_instance = swagger_client.ScopesApi()
-id =  # UUID | The scopes id
-
-try: 
-    # Find all children of specific scope
-    api_response = api_instance.get_child_scopes(id)
-    pprint(api_response)
-except ApiException as e:
-    print("Exception when calling ScopesApi->getChildScopes: %s\n" % e)</code></pre>
-                            </div>
-                          </div>
-
-                          <h2>Parameters</h2>
-
-                            <div class="methodsubtabletitle">Path parameters</div>
-                            <table id="methodsubtable">
-                                <tr>
-                                  <th width="150px">Name</th>
-                                  <th>Description</th>
-                                </tr>
-                                  <tr><td style="width:150px;">id*</td>
-<td>
-
-
-    <div id="d2e199_getChildScopes_id">
-        <div class="json-schema-view">
-            <div class="primitive">
-                <span class="type">
-                    UUID
-                </span>
-                    <span class="format">
-                        (uuid)
-                    </span>
-
-                    <div class="inner description">
-                        The scopes id
-                    </div>
-            </div>
-                <div class="inner required">
-                    Required
-                </div>
-        </div>
-    </div>
-</td>
-</tr>
-
-                            </table>
-
-
-
-
-
-                          <h2>Responses</h2>
-                            <h3> Status: 200 - OK </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-getChildScopes-200-schema">Schema</a>
-                                </li>
-
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-getChildScopes-200-schema">
-                                  <div id='responses-getChildScopes-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "OK",
-  "schema" : {
-    "type" : "array",
-    "items" : {
-      "$ref" : "#/definitions/ScopeResponse"
-    }
-  }
-};
-                                        var schema = schemaWrapper.schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.definitions = defs;
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        //console.log(JSON.stringify(schema));
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-getChildScopes-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-getChildScopes-200-schema-200');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-getChildScopes-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 

@@ -63,7 +63,7 @@ public class ScopeController {
 	}
 
 	@ApiOperation(value = "Find all children of specific scope", notes = "Accessible with: "
-			+ Roles.SCOPE_READ, nickname = "getChildScopes")
+			+ Roles.SCOPE_READ, nickname = "findChildScopes")
 	@Secured(Roles.SCOPE_READ)
 	@RequestMapping(value = "/{id}/childs", method = RequestMethod.GET)
 	public List<ScopeResponse> findChilds(
