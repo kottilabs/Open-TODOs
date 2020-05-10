@@ -53,7 +53,7 @@ public class TodoController {
 	@RequestMapping(value = "/{scope}", method = RequestMethod.POST)
 	public TodoResponse create(
 			@ApiParam(value = SpringFoxConfig.SCOPE_ID, required = true) @PathVariable final UUID scope,
-			@ApiParam(value = "Todo to Create", required = true, type = "TodoRequest") @RequestBody @Validated(TodoRequest.Create.class) final TodoRequest todo) {
+			@ApiParam(value = "Todo to Create", required = true) @RequestBody @Validated(TodoRequest.Create.class) final TodoRequest todo) {
 		UUID scopeId = todo.getScopeId();
 		if (scopeId != null) {
 			if (!scopeId.equals(scope)) {
@@ -70,7 +70,7 @@ public class TodoController {
 	public TodoResponse update(
 			@ApiParam(value = SpringFoxConfig.SCOPE_ID, required = true) @PathVariable final UUID scope,
 			@ApiParam(value = SpringFoxConfig.TODO_ID, required = true) @PathVariable final UUID id,
-			@ApiParam(value = SpringFoxConfig.UPDATE_REQUEST, required = true, type = "TodoRequest") @RequestBody @Validated(TodoRequest.Update.class) final TodoRequest todo) {
+			@ApiParam(value = SpringFoxConfig.UPDATE_REQUEST, required = true) @RequestBody @Validated(TodoRequest.Update.class) final TodoRequest todo) {
 		return convert(todoService.update(scope, id, convert(todo, todo.getScopeId())));
 	}
 
