@@ -37,7 +37,8 @@ public class TodoController {
 	@Autowired
 	private ScopeService scopeService;
 
-	@ApiOperation(value = "Find all todos in scope", notes = "Accessible with: " + Roles.TODO_READ)
+	@ApiOperation(value = "Find all todos in scope", notes = "Accessible with: "
+			+ Roles.TODO_READ, nickname = "findTodos")
 	@Secured(Roles.TODO_READ)
 	@RequestMapping(value = "/{scope}", method = RequestMethod.GET)
 	public List<TodoResponse> find(
@@ -46,7 +47,8 @@ public class TodoController {
 		return results.stream().map(this::convert).collect(Collectors.toList());
 	}
 
-	@ApiOperation(value = "Create a todo in scope", notes = "Accessible with: " + Roles.TODO_CREATE)
+	@ApiOperation(value = "Create a todo in scope", notes = "Accessible with: "
+			+ Roles.TODO_CREATE, nickname = "createTodo")
 	@Secured(Roles.TODO_CREATE)
 	@RequestMapping(value = "/{scope}", method = RequestMethod.POST)
 	public TodoResponse create(
@@ -61,7 +63,8 @@ public class TodoController {
 		return convert(todoService.save(convert(todo, scope)));
 	}
 
-	@ApiOperation(value = "Update specific todo in scope", notes = "Accessible with: " + Roles.TODO_UPDATE)
+	@ApiOperation(value = "Update specific todo in scope", notes = "Accessible with: "
+			+ Roles.TODO_UPDATE, nickname = "updateTodo")
 	@Secured(Roles.TODO_UPDATE)
 	@RequestMapping(value = "/{scope}/{id}", method = RequestMethod.PUT)
 	public TodoResponse update(
@@ -71,7 +74,8 @@ public class TodoController {
 		return convert(todoService.update(scope, id, convert(todo, todo.getScopeId())));
 	}
 
-	@ApiOperation(value = "Get specific todo in scope", notes = "Accessible with: " + Roles.TODO_READ)
+	@ApiOperation(value = "Get specific todo in scope", notes = "Accessible with: "
+			+ Roles.TODO_READ, nickname = "getTodo")
 	@Secured(Roles.TODO_READ)
 	@RequestMapping(value = "/{scope}/{id}", method = RequestMethod.GET)
 	public TodoResponse get(@ApiParam(value = SpringFoxConfig.SCOPE_ID, required = true) @PathVariable final UUID scope,
@@ -79,7 +83,8 @@ public class TodoController {
 		return convert(todoService.findById(scope, id));
 	}
 
-	@ApiOperation(value = "Delete specific todo in scope", notes = "Accessible with: " + Roles.TODO_CREATE)
+	@ApiOperation(value = "Delete specific todo in scope", notes = "Accessible with: "
+			+ Roles.TODO_CREATE, nickname = "deleteTodo")
 	@Secured(Roles.TODO_CREATE)
 	@RequestMapping(value = "/{scope}/{id}", method = RequestMethod.DELETE)
 	public TodoResponse delete(

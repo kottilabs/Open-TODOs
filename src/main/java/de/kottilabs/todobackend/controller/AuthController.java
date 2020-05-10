@@ -39,7 +39,7 @@ public class AuthController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@ApiOperation("Login")
+	@ApiOperation(value = "Login", nickname = "login")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public AuthResponse login(@ApiParam(value = "Login credentials", required = true) @RequestBody AuthRequest data) {
 		try {
@@ -65,14 +65,14 @@ public class AuthController {
 		}
 	}
 
-	@ApiOperation("Logout a specific token")
+	@ApiOperation(value = "Logout a specific token", nickname = "logout")
 	@RequestMapping(value = "/logout", method = RequestMethod.POST)
 	public AuthLogoutResponse logout(@ApiIgnore Authentication authentication) {
 		AuthToken authToken = (AuthToken) authentication.getCredentials();
 		return convert(userService.deleteByAuthToken(authToken.getUsername(), authToken.getIssuedAt()));
 	}
 
-	@ApiOperation("Logout all tokens from my username")
+	@ApiOperation(value = "Logout all tokens from my username", nickname = "logoutAll")
 	@RequestMapping(value = "/logoutAll", method = RequestMethod.POST)
 	public AuthLogoutResponse logoutAll(@ApiIgnore Authentication authentication) {
 		AuthToken authToken = (AuthToken) authentication.getCredentials();

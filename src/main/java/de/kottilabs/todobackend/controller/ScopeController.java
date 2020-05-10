@@ -29,7 +29,7 @@ public class ScopeController {
 	@Autowired
 	private ScopeService scopeService;
 
-	@ApiOperation(value = "Find all scopes", notes = "Accessible with: " + Roles.SCOPE_READ)
+	@ApiOperation(value = "Find all scopes", notes = "Accessible with: " + Roles.SCOPE_READ, nickname = "findScopes")
 	@Secured(Roles.SCOPE_READ)
 	@RequestMapping(method = RequestMethod.GET)
 	public List<ScopeResponse> find() {
@@ -37,7 +37,7 @@ public class ScopeController {
 		return results.stream().map(this::convert).collect(Collectors.toList());
 	}
 
-	@ApiOperation(value = "Create a scope", notes = "Accessible with: " + Roles.SCOPE_CREATE)
+	@ApiOperation(value = "Create a scope", notes = "Accessible with: " + Roles.SCOPE_CREATE, nickname = "createScope")
 	@Secured(Roles.SCOPE_CREATE)
 	@RequestMapping(method = RequestMethod.POST)
 	public ScopeResponse create(
@@ -45,7 +45,8 @@ public class ScopeController {
 		return convert(scopeService.save(convert(scope)));
 	}
 
-	@ApiOperation(value = "Update a specific scope", notes = "Accessible with: " + Roles.SCOPE_UPDATE)
+	@ApiOperation(value = "Update a specific scope", notes = "Accessible with: "
+			+ Roles.SCOPE_UPDATE, nickname = "updateScope")
 	@Secured(Roles.SCOPE_UPDATE)
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ScopeResponse update(
@@ -54,14 +55,15 @@ public class ScopeController {
 		return convert(scopeService.update(id, convert(scope)));
 	}
 
-	@ApiOperation(value = "Get a specific scope", notes = "Accessible with: " + Roles.SCOPE_READ)
+	@ApiOperation(value = "Get a specific scope", notes = "Accessible with: " + Roles.SCOPE_READ, nickname = "getScope")
 	@Secured(Roles.SCOPE_READ)
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ScopeResponse get(@ApiParam(value = SpringFoxConfig.SCOPE_ID, required = true) @PathVariable final UUID id) {
 		return convert(scopeService.findById(id));
 	}
 
-	@ApiOperation(value = "Find all children of specific scope", notes = "Accessible with: " + Roles.SCOPE_READ)
+	@ApiOperation(value = "Find all children of specific scope", notes = "Accessible with: "
+			+ Roles.SCOPE_READ, nickname = "getChildScopes")
 	@Secured(Roles.SCOPE_READ)
 	@RequestMapping(value = "/{id}/childs", method = RequestMethod.GET)
 	public List<ScopeResponse> findChilds(
@@ -69,7 +71,8 @@ public class ScopeController {
 		return scopeService.getScopeWithChildren(id).stream().map(this::convert).collect(Collectors.toList());
 	}
 
-	@ApiOperation(value = "Delete a specific scope", notes = "Accessible with: " + Roles.SCOPE_CREATE)
+	@ApiOperation(value = "Delete a specific scope", notes = "Accessible with: "
+			+ Roles.SCOPE_CREATE, nickname = "deleteScope")
 	@Secured(Roles.SCOPE_CREATE)
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ScopeResponse delete(
