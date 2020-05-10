@@ -1,9 +1,6 @@
 package de.kottilabs.todobackend.config;
 
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -113,9 +110,19 @@ public class JwtTokenProvider {
 	@Scheduled(fixedRate = 10000)
 	@Transactional
 	public void dropExpiredTokens() {
-		long count = authTokenRepository.deleteByValidityLessThan(new Date().getTime());
+		final long count = authTokenRepository.deleteByValidityLessThan(new Date().getTime());
 		if (count > 0) {
 			log.info("Dropped {} expired token(s)", count);
+		}
+	}
+
+	@Scheduled(fixedRate = 60000)
+	@Transactional
+	public void logActiveTokens() {
+		final long count = authTokenRepository.count();
+		final long users = authTokenRepository.countDistinctUsername();
+		if (count > 0) {
+			log.info("{} active token(s) by {} user(s)", count, users);
 		}
 	}
 }
